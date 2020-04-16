@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
-app2 = Flask(__name__)
-app2.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:yogikadikar@localhost/height_collector'
-db=SQLAlchemy(app2)
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:yogikadikar@localhost/height_collector'
+db=SQLAlchemy(app)
 
-class data(db.Model):
+class Data(db.Model):
     __tablename__="data"
     id= db.Column(db.Integer, primary_key=True)
     email_ = db.Column(db.String(120), unique = True)
@@ -16,17 +16,22 @@ class data(db.Model):
         self.height_ = height_
 
 
-@app2.route("/")
+@app.route("/")
 def index():
     return render_template("index.html")
 
-@app2.route("/success", methods = ['POST'])
+@app.route("/success", methods = ['POST'])
 def success():
     if request.method == 'POST':
         email = request.form["email_name"]
         height = request.form["height_name"]
-        return render_template("success.html")
-
+        if db.session.query(Data).filter(Data.email_==email).count() == 0:
+            data=Data(email,height)
+            db.session.add(data)
+            db.session.commit()
+            return render_template("success.html")
+    return render_template("index.html")
+    
 if __name__ == "__main__":
-    app2.debug = True
-    app2.run()
+    app.debug = True
+    app.run()
