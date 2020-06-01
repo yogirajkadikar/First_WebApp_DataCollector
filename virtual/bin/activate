@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/yogiraj/mysite/WebApp/virtual"
+VIRTUAL_ENV="/home/yogiraj/Documents/Python/data_collection/First_WebApp_DataCollector/virtual"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
